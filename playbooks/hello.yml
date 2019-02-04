@@ -1,0 +1,8 @@
+---
+- hosts: local
+  tasks:
+    - name: Say hello
+      shell: echo "Hello world!"
+      register: hello
+
+    - debug: msg="{{ hello.stdout }}"

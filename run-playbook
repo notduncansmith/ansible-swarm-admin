@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+playbook=${1:-hello}
+docker run -i \
+--env playbook=$playbook \
+-v $PWD:/var/ops \
+-t ansible-admin:latest
