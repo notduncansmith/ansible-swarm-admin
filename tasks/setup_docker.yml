@@ -1,0 +1,59 @@
+## To set up Docker, we should:
+# - Install Docker + Docker Engine
+# - Enable swarm mode
+# - If swarm_manager var defined, join it
+
+- name: Install Docker host dependencies
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - gnupg-agent
+    - software-properties-common
+
+- name: Add Docker Apt repository signing key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+    name: "add docker repository"
+
+- name: Add Docker Apt repository
+  apt_repository:
+    repo: 'deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable'
+    state: present
+
+- name: Install Docker packages
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+
+# Logging into DockerHub securely is non-obvious. Shell commands
+# will be logged, so we don't want to give the password via the CLI.
+# Instead, we'll upload a file containing the password, stream it to
+# the CLI via STDIN, and then delete said file.
+# The password itself is read from secrets.yml using Ansible Vault (https://docs.ansible.com/ansible/2.7/vault.html)
+
+- include_tasks: ./include_secrets.yml
+
+- name: Ensure credentials directory exists
+  file:
+    path: /var/credentials
+    state: directory
+    mode: 0744
+
+- name: Upload DockerHub password file
+  shell: echo "{{ secrets.dockerhub.password }}" > /var/credentials/dockerhub
+
+- name: Log into DockerHub
+  shell: "cat /var/credentials/dockerhub | docker login --username {{ secrets.dockerhub.username }} --password-stdin"
+
+- name: Clean up by deleting DockerHub password file
+  shell: rm -f /var/credentials/dockerhub

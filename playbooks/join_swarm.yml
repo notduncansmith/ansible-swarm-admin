@@ -1,0 +1,11 @@
+---
+- hosts: workers
+  remote_user: root
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: Join Docker Swarm as a worker
+      shell: "docker swarm join --token {{ swarm.token }} {{ swarm.manager_ip }}"
+      register: swarm_join
+
+    - debug: msg="{{ swarm_join.stdout }}"

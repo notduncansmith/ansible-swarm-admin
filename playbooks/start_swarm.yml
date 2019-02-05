@@ -1,0 +1,12 @@
+---
+- hosts: manager
+  remote_user: root
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: Start Docker Swarm manager
+      shell: docker swarm init
+      register: swarm_init
+
+    - debug: msg="{{ swarm_init.stdout }}"
+

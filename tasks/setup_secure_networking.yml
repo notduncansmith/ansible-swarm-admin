@@ -1,0 +1,24 @@
+## To secure VM networking, we should:
+# - Limit open ports (with Uncomplicated Firewall)
+# - Rate-limit incoming network traffic (with fail2ban)
+
+- name: Install firewall
+  apt: name=ufw state=present update_cache=yes
+
+- name: Set secure default firewall policy
+  ufw: policy=deny
+
+- name: Allow SSH traffic
+  ufw: rule=allow port=ssh
+
+- name: Allow TCP on default HTTP port (80)
+  ufw: rule=allow port=80 proto=tcp
+
+- name: Ensure firewall is running
+  ufw: state=enabled
+
+- name: Install rate-limiting utility fail2ban
+  apt: name=fail2ban state=present update_cache=yes
+
+- name: Ensure fail2ban is running
+  service: name=fail2ban service=started
