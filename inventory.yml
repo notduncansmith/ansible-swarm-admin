@@ -3,4 +3,27 @@ local:
     localhost:
   vars:
     ansible_connection: local
-    ansible_python_interpreter: "{{ansible_playbook_python}}"
+    ansible_python_interpreter: "{{ ansible_playbook_python }}"
+    swarm:
+      manager_ip: 127.0.0.1
+      token: SWMTKN-1-49nj1cmql0jkz5s954yi3oex3nedyz0fb0xx14ie39trti4wxv-8vxv8rssmk743ojnwacrr2e7c
+
+manager:
+  hosts:
+    localhost:
+  vars:
+    ansible_connection: local
+    ansible_python_interpreter: "{{ ansible_playbook_python }}"
+    swarm:
+      manager_ip: 127.0.0.1
+      token: SWMTKN-1-49nj1cmql0jkz5s954yi3oex3nedyz0fb0xx14ie39trti4wxv-8vxv8rssmk743ojnwacrr2e7c
+
+workers:
+  hosts:
+    localhost:
+  vars:
+    ansible_connection: local
+    ansible_python_interpreter: "{{ ansible_playbook_python }}"
+    swarm:
+      manager_ip: 127.0.0.1
+      token: SWMTKN-1-49nj1cmql0jkz5s954yi3oex3nedyz0fb0xx14ie39trti4wxv-8vxv8rssmk743ojnwacrr2e7c
