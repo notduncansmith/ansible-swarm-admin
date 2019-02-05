@@ -1,0 +1,13 @@
+---
+- hosts: manager
+  remote_user: root
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: "[manager] Stop current Docker Swarm -- ERASES ALL SWARM STATE"
+      shell: docker swarm leave --force
+      register: swarm_leave
+
+    - debug: msg="{{ swarm_leave.stdout }}"
+
+- import_playbook: ./start_swarm.yml

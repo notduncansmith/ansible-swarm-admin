@@ -18,7 +18,6 @@
   apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
     state: present
-    name: "add docker repository"
 
 - name: Add Docker Apt repository
   apt_repository:
@@ -34,26 +33,3 @@
     - docker-ce
     - docker-ce-cli
     - containerd.io
-
-# Logging into DockerHub securely is non-obvious. Shell commands
-# will be logged, so we don't want to give the password via the CLI.
-# Instead, we'll upload a file containing the password, stream it to
-# the CLI via STDIN, and then delete said file.
-# The password itself is read from secrets.yml using Ansible Vault (https://docs.ansible.com/ansible/2.7/vault.html)
-
-- include_tasks: ./include_secrets.yml
-
-- name: Ensure credentials directory exists
-  file:
-    path: /var/credentials
-    state: directory
-    mode: 0744
-
-- name: Upload DockerHub password file
-  shell: echo "{{ secrets.dockerhub.password }}" > /var/credentials/dockerhub
-
-- name: Log into DockerHub
-  shell: "cat /var/credentials/dockerhub | docker login --username {{ secrets.dockerhub.username }} --password-stdin"
-
-- name: Clean up by deleting DockerHub password file
-  shell: rm -f /var/credentials/dockerhub

@@ -1,0 +1,10 @@
+---
+- hosts: workers
+  remote_user: root
+  become: yes
+  become_method: sudo
+  tasks:
+    - include_tasks: ../tasks/setup_secure_networking.yml
+    - include_tasks: ../tasks/setup_docker.yml
+
+- import_playbook: ./join_swarm.yml

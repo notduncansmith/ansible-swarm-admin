@@ -2,8 +2,14 @@
 # - Limit open ports (with Uncomplicated Firewall)
 # - Rate-limit incoming network traffic (with fail2ban)
 
-- name: Install firewall
-  apt: name=ufw state=present update_cache=yes
+- name: Install secure networking dependencies
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - ufw
+    - fail2ban
 
 - name: Set secure default firewall policy
   ufw: policy=deny
@@ -11,14 +17,23 @@
 - name: Allow SSH traffic
   ufw: rule=allow port=ssh
 
+- name: Disable SSH passwords
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^PasswordAuthentication'
+    line: "PasswordAuthentication no"
+
+- name: Disable SSH challenge-response
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^ChallengeResponseAuthentication'
+    line: "ChallengeResponseAuthentication no"
+
 - name: Allow TCP on default HTTP port (80)
   ufw: rule=allow port=80 proto=tcp
 
 - name: Ensure firewall is running
   ufw: state=enabled
-
-- name: Install rate-limiting utility fail2ban
-  apt: name=fail2ban state=present update_cache=yes
 
 - name: Ensure fail2ban is running
   service: name=fail2ban service=started

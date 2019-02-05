@@ -6,24 +6,30 @@ local:
     ansible_python_interpreter: "{{ ansible_playbook_python }}"
     swarm:
       manager_ip: 127.0.0.1
-      token: SWMTKN-1-49nj1cmql0jkz5s954yi3oex3nedyz0fb0xx14ie39trti4wxv-8vxv8rssmk743ojnwacrr2e7c
+      token: SWMTKN-1-acbdef-ghijkl
 
 manager:
   hosts:
-    localhost:
+    '104.247.64.79': # The public IP that we SSH into with Ansible
+      ansible_user: root
+      ansible_connection: ssh
+      ansible_ssh_private_key_file: /var/ops/admin_key
   vars:
-    ansible_connection: local
-    ansible_python_interpreter: "{{ ansible_playbook_python }}"
     swarm:
-      manager_ip: 127.0.0.1
-      token: SWMTKN-1-49nj1cmql0jkz5s954yi3oex3nedyz0fb0xx14ie39trti4wxv-8vxv8rssmk743ojnwacrr2e7c
+      manager_ip: 10.137.91.1 # The private IP that Docker Swarm workers connect to
+      token: SWMTKN-1-acbdef-ghijkl
 
 workers:
   hosts:
-    localhost:
+    '163.226.39.81':
+      ansible_user: root
+      ansible_connection: ssh
+      ansible_ssh_private_key_file: /var/ops/admin_key
+    '163.226.39.82':
+      ansible_user: root
+      ansible_connection: ssh
+      ansible_ssh_private_key_file: /var/ops/admin_key
   vars:
-    ansible_connection: local
-    ansible_python_interpreter: "{{ ansible_playbook_python }}"
     swarm:
-      manager_ip: 127.0.0.1
-      token: SWMTKN-1-49nj1cmql0jkz5s954yi3oex3nedyz0fb0xx14ie39trti4wxv-8vxv8rssmk743ojnwacrr2e7c
+      manager_ip: 10.137.91.1
+      token: SWMTKN-1-acbdef-ghijkl

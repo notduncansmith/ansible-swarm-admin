@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+host=$1
+ssh-keyscan -H $host >> ./known_hosts

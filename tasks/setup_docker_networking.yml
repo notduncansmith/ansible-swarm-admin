@@ -1,0 +1,8 @@
+- name: Open Docker Swarm network discovery port (tcp)
+  ufw: rule=allow port=7946 proto=tcp
+
+- name: Open Docker Swarm network discovery port (udp)
+  ufw: rule=allow port=7946 proto=udp
+
+- name: Open Docker Swarm overlay network port (udp)
+  ufw: rule=allow port=4789 proto=udp
