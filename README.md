@@ -13,7 +13,9 @@ This repository contains:
 
 ## Setup
 
-Generate a new admin key: `ssh-keygen -t ed25519 -f ./admin_key`. Make sure your `admin_key` file is in this directory when you run commands.
+Generate a new admin key: `ssh-keygen -t ed25519 -f ~/.ssh/swarm_admin_key`
+
+Symlink that key into this directory: `ln -s ~/.ssh/ansible_admin_key ./admin_key`
 
 Make sure the `inventory.yml` file contains your actual node IP addresses, and these addresses will allow you to SSH in as root with `./admin_key`.
 
